@@ -20,7 +20,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
         }
 
         if (password.length < 6) {
-            res.status(400).json({ message: "Passord should be at least 6 characters long" })
+            res.status(400).json({ message: "Password should be at least 6 characters long" })
             return;
         }
 
@@ -50,7 +50,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
             email,
             username,
             password: hashedPassword,
-            profileImage: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(username)}` // Added encodeURIComponent
+            profileImage: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(username)}`
         });
         await user.save();
         const token = generateToken((user._id as string).toString());
@@ -58,7 +58,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
         res.status(201).json({
             success: true,
             message: "User created Successfully",
-            data: rest,
+            user: rest,
             token
         })
     } catch (error) {
