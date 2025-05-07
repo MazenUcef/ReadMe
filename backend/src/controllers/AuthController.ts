@@ -4,8 +4,10 @@ import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 
+// In your authController.ts
 const generateToken = (userId: string) => {
-    return jwt.sign({ userId }, process.env.JWT_SECRET as string, { expiresIn: "15d" })
+    return jwt.sign({ _id: userId }, process.env.JWT_SECRET as string, { expiresIn: "15d" });
+    // Changed from {userId} to {_id} to match your User model
 }
 
 
@@ -53,7 +55,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
             profileImage: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(username)}`
         });
         await user.save();
-        const token = generateToken((user._id as string).toString());
+        const token = generateToken((user._id as unknown as string).toString());
         const { password: pass, ...rest } = user.toObject();
         res.status(201).json({
             success: true,
@@ -88,13 +90,13 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
             res.status(401).json({ message: "Invalid credentials, Wrong password" });
             return
         }
-        const token = generateToken((user._id as string).toString());
+        const token = generateToken((user._id as unknown as string).toString());
 
         const { password: pass, ...rest } = user.toObject();
         res.status(200).json({
             success: true,
-            message: "User created Successfully",
-            data: rest,
+            message: "User logged in Successfully",
+            user: rest,
             token
         })
 

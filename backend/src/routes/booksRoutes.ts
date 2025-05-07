@@ -9,7 +9,7 @@ const router = express.Router()
 router.get('/getRecommendedBooks', verifyToken, BooksController.getRecommendedBooks)
 router.get('/getBooks', verifyToken, BooksController.getBooks)
 router.post('/add', verifyToken, BooksController.addBook)
-router.delete('/delete/:id', BooksController.deleteBook)
+router.delete('/delete/:id', verifyToken, BooksController.deleteBook)
 
 
 export default router

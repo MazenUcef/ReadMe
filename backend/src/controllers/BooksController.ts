@@ -78,7 +78,8 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
             return
         }
 
-        if (book.user.toString() !== req.user?._id) {
+        if (!req.user?._id || book.user.toString() !== req.user._id.toString()) {
+            
             res.status(401).json({ message: "Unauthorized" })
             return
         }

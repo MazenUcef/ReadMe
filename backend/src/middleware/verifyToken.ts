@@ -19,18 +19,15 @@ export const verifyToken = async (
     try {
         // Get token from header
         const token = req.header("Authorization")?.replace("Bearer ", "");
-
         if (!token) {
             res.status(401).json({ message: "No authentication token, access denied" });
             return
         }
 
         // Verify token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string };
-
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { _id: string };
         // Find user (exclude password)
-        const user = await User.findById(decoded.userId).select("-password");
-
+        const user = await User.findById(decoded._id).select("-password");
         if (!user) {
             res.status(401).json({ message: "User not found" });
             return
